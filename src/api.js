@@ -2,6 +2,7 @@ const express = require('express');
 
 // ...
 
+// Comentário para abrir o PR do projeto.
 const app = express();
 
 app.use(express.json());
