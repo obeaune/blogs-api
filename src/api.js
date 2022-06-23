@@ -1,14 +1,16 @@
 const express = require('express');
 
-// ...
-
-// Comentário para abrir o PR do projeto.
 const app = express();
+
+// const ErrorHandler = require('./middlewares/errorHandler');
+const userController = require('./controllers/userController');
+const loginController = require('./controllers/loginController');
 
 app.use(express.json());
 
-// ...
+app.use('/users', userController);
+app.use('/login', loginController);
 
-// É importante exportar a constante `app`,
-// para que possa ser utilizada pelo arquivo `src/server.js`
+// app.use(ErrorHandler);
+
 module.exports = app;
