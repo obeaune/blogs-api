@@ -1,12 +1,8 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
 
-const router = express.Router();
+const generateToken = require('../middlewares/generateToken');
 
-const secret = process.env.JWT_SECRET;
-
-router.post('/', async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   // [can't login without all fields filled]
@@ -21,9 +17,8 @@ router.post('/', async (req, res) => {
   }
 
   // [is it possible to login successfully]
-  const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
-  const token = jwt.sign({ data: user.email }, secret, jwtConfig);
-  res.status(200).json({ token });
-});
+  const token = generateToken(email);
+  return res.status(200).json({ token });
+};
 
-module.exports = router;
+module.exports = login;

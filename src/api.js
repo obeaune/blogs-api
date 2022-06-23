@@ -2,15 +2,16 @@ const express = require('express');
 
 const app = express();
 
-// const ErrorHandler = require('./middlewares/errorHandler');
-const userController = require('./controllers/userController');
-const loginController = require('./controllers/loginController');
+const ErrorHandler = require('./middlewares/errorHandler');
+const loginRouter = require('./routes/loginRouter');
+const userRouter = require('./routes/userRouter');
 
 app.use(express.json());
 
-app.use('/users', userController);
-app.use('/login', loginController);
+app.use('/login', loginRouter);
 
-// app.use(ErrorHandler);
+app.use('/user', userRouter);
+
+app.use(ErrorHandler);
 
 module.exports = app;

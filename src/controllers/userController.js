@@ -1,18 +1,28 @@
-const express = require('express');
 const { User } = require('../database/models');
 
-const router = express.Router();
+const generateToken = require('../middlewares/generateToken');
 
-// Este endpoint usa o método findAll do Sequelize para retorno todos os users.
-router.get('/', async (_req, res) => {
-  try {
-    const users = await User.findAll();
+const getAll = async (_req, res) => {
+  const users = await User.findAll();
+  if (!users) return res.status(500).json({ message: 'Something went wrong' });
+  return res.status(200).json(users);
+};
 
-    return res.status(200).json(users);
-  } catch (e) {
-    console.log(e.message);
-    res.status(500).json({ message: 'Algo deu errado' });
-  }
-});
+const create = async (req, res) => {
+  const { displayName, email, password, image } = req.body;
 
-module.exports = router;
+  // [it is not possible to register with an existing email]
+  const alreadyExists = await User.findOne({ where: { email } });
+  if (alreadyExists) return res.status(409).json({ message: 'User already registered' });
+
+  // [is it possible to register a user successfully]
+  await User.create({ displayName, email, password, image });
+
+  const token = generateToken(email);
+  return res.status(201).json({ token });
+};
+
+module.exports = {
+  getAll,
+  create,
+};
