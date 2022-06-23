@@ -3,7 +3,9 @@ const { User } = require('../database/models');
 const generateToken = require('../middlewares/generateToken');
 
 const getAll = async (_req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    attributes: ['id', 'displayName', 'email', 'image'],
+  });
   if (!users) return res.status(500).json({ message: 'Something went wrong' });
   return res.status(200).json(users);
 };
