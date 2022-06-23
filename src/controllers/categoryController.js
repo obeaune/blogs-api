@@ -1,6 +1,6 @@
 const { Category } = require('../database/models');
 
-const login = async (req, res) => {
+const create = async (req, res) => {
   const { name } = req.body;
 
   // [it is not possible to register a category without the name field]
@@ -11,4 +11,12 @@ const login = async (req, res) => {
   return res.status(201).json(newCategory);
 };
 
-module.exports = login;
+const getAll = async (_req, res) => {
+  const allCategories = await Category.findAll();
+  return res.status(200).json(allCategories);
+};
+
+module.exports = {
+  create,
+  getAll,
+};
