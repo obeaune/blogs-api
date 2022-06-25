@@ -1,7 +1,7 @@
 const Service = require('../services/categoryService');
 
 const getAll = async (_req, res) => {
-  const response = await Service.findAll();
+  const response = await Service.getAll();
   return res.status(200).json(response);
 };
 
