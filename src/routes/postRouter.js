@@ -9,6 +9,6 @@ route.get('/', validateJWT, post.getAll);
 
 route.get('/:id', validateJWT, post.getById);
 
-// route.post('/', validateJWT, post.create);
+route.post('/', validateJWT, post.create);
 
 module.exports = route;
