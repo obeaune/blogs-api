@@ -7,9 +7,11 @@ const validateJWT = require('../middlewares/validateJWT');
 
 route.get('/', validateJWT, post.getAll);
 
-route.get('/:id', validateJWT, post.getById);
-
 route.post('/', validateJWT, post.create);
+
+route.get('/search', validateJWT, post.search);
+
+route.get('/:id', validateJWT, post.getById);
 
 route.put('/:id', validateJWT, post.update);
 

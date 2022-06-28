@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 const { BlogPost, User, Category, PostCategory } = require('../database/models');
 
 const secret = process.env.JWT_SECRET;
@@ -95,10 +96,39 @@ const exclude = async (id, token) => {
   return true;
 };
 
+const search = async (query) => {
+  // [it is possible to search all blogposts when passing the empty search]
+  if (query === '') {
+    const allPosts = await BlogPost.findAll({ include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ] });
+    return allPosts;
+  }
+  
+  // [you can search for a blogpost by title or content]
+  const postOrPosts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: { [Op.like]: query } }, { content: { [Op.like]: query } }],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  
+  // [it is possible to fetch a non-existent blogpost and return empty array]
+  if (!postOrPosts) return [];
+
+  // [in case of success]
+  return postOrPosts;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   exclude,
+  search,
 };

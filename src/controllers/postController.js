@@ -79,10 +79,19 @@ const exclude = async (req, res) => {
   return res.status(204).json();
 };
 
+const search = async (req, res) => {
+  const { q } = req.query;
+
+  const response = await Service.search(q);  
+
+  return res.status(200).json(response);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   exclude,
+  search,
 };
