@@ -24,7 +24,7 @@ const getById = async (id) => {
 };
 
 // AUXILIARY FUNCTIONS TO CREATE
-const validateCategoriesWith = async (arrIds) => {
+const validateCategories = async (arrIds) => {
   const allCategories = await Category.findAll();
   const categoriesIds = allCategories.map(({ dataValues: { id } }) => id);
   const result = arrIds.every((id) => categoriesIds.includes(id));
@@ -44,7 +44,7 @@ const create = async (title, content, categoryIds, token) => {
   if (!title || !content || !categoryIds) return 'missing';
 
   // [it is not possible to register a blogpost with a non-existent categoryIds]
-  const validCategoryIds = await validateCategoriesWith(categoryIds);
+  const validCategoryIds = await validateCategories(categoryIds);
   if (!validCategoryIds) return 'invalid';
 
   // [it is possible to register a blogPost successfully]
