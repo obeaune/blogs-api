@@ -6,6 +6,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   const response = await Service.login(email, password);
+
   // [can't login without all fields filled]
   if (response === 'missing') {
     return res.status(400).json({ message: 'Some required fields are missing' });
