@@ -81,9 +81,24 @@ const update = async (title, content, id, token) => {
   return postUpdated;
 };
 
+const exclude = async (id, token) => {
+  // [find out if the post exists]
+  const post = await BlogPost.findOne({ where: { id } });
+  if (!post) return ('nonexistent');
+
+  // [cannot delete a blogpost with another user]
+  const userId = await findUser(token);
+  if (userId !== post.userId) return 'unauthorized';
+
+  // [it is possible to delete a blogpost successfully]
+  await BlogPost.destroy({ where: { id } });
+  return true;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  exclude,
 };

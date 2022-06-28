@@ -13,4 +13,6 @@ route.post('/', validateJWT, post.create);
 
 route.put('/:id', validateJWT, post.update);
 
+route.delete('/:id', validateJWT, post.exclude);
+
 module.exports = route;

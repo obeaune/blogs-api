@@ -63,9 +63,26 @@ const update = async (req, res) => {
   return res.status(200).json(response);
 };
 
+const exclude = async (req, res) => {
+  const { id } = req.params;
+  const token = req.headers.authorization;
+
+  const response = await Service.exclude(id, token);
+
+  // [cannot delete a blogpost with another user]
+  if (response === 'unauthorized') return res.status(401).json({ message: 'Unauthorized user' });
+  
+  // [in case of post not found]
+  if (response === 'nonexistent') return res.status(404).json({ message: 'Post does not exist' });
+  
+  // [it is possible to delete a blogpost successfully]
+  return res.status(204).json();
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  exclude,
 };
