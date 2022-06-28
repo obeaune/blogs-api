@@ -37,8 +37,17 @@ const create = async (req, res) => {
   return res.status(201).json({ token });
 };
 
+const exclude = async (req, res) => {
+  const token = req.headers.authorization;
+
+  await Service.exclude(token);
+
+  return res.status(204).end();
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  exclude,
 };

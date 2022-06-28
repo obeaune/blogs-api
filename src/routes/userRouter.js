@@ -12,4 +12,6 @@ route.post('/', validateUser, user.create);
 
 route.get('/:id', validateJWT, user.getById);
 
+route.delete('/me', validateJWT, user.exclude);
+
 module.exports = route;
