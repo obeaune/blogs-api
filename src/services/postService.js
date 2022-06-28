@@ -62,8 +62,28 @@ const create = async (title, content, categoryIds, token) => {
   return resp;
 };
 
+const update = async (title, content, id, token) => {
+  // [find out if the post exists]
+  const post = await BlogPost.findOne({ where: { id } });
+  if (!post) return ('nonexistent');
+
+  // [cannot edit a blogpost with another user]
+  const userId = await findUser(token);
+  if (userId !== post.userId) return 'unauthorized';
+
+  // [cannot edit without all fields filled]
+  if (!title || !content) return 'missing';
+
+  // [it is possible to edit a blogpost successfully]
+  const date = new Date();
+  await BlogPost.update({ title, content, updated: date }, { where: { id } });
+  const postUpdated = await getById(id);
+  return postUpdated;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };
