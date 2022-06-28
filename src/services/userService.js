@@ -15,7 +15,11 @@ const getById = async (id) => {
 
 const create = async (displayName, email, password, image) => {
   const alreadyExists = await User.findOne({ where: { email } });
+
+  // [it is not possible to register with an existing email]
   if (alreadyExists) return undefined;
+
+  // [it is possible to register a user successfully]
   await User.create({ displayName, email, password, image });
   return true;
 };
